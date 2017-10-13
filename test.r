@@ -12,9 +12,9 @@ testURL <- "https://api.login.yahoo.com/oauth2/request_auth"
 cCode <- "nh7bkaa"
 
 h <- new_handle()
-handle_setheaders(h, "client_id" = "cKey")
+handle_setheaders(h, "client_id" = "abcdefghijklmnopqrstuvwxyz")
 
-URLReq <- paste0(accessURL,"?client_id=",cKey,"&client_secret=",cSecret,"&code=",cCode,"&grant_type=authorization_code&language=en-us")
+URLReq <- paste0(accessURL,"?client_id=",cKey,"&client_secret=",cSecret,"&code=",cCode,"&grant_type=authorization_code")
 
 r <- curl_fetch_memory(URLReq, h)
 URLReq
