@@ -38,3 +38,10 @@ URLReq
 r
 
 h
+
+##
+#r <- POST(URLReq, body = "a simple")
+#r
+#stop_for_status(r)
+#content(r)
+##
