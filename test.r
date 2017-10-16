@@ -37,9 +37,15 @@ value <- paste0("Basic ",b64encoded)
 #content(r)
 #r
 
-y.app <- oauth_app("yahoo", key=cKey, secret=cSecret)
-y.urls <- oauth_endpoint(NULL, "authorize", "accessToken", base_url="https://fantasysports.yahooapis.com/fantasy/v2/")
-y.token <- oauth2.0_token(y.urls, y.app, use_oob=TRUE)
+y.app <- oauth_app("yahoo", key=cKey, secret=cSecret, redirect_uri = "oob")
+#y.urls <- oauth_endpoint(NULL, "authorize", "accessToken", base_url="https://fantasysports.yahooapis.com/fantasy/v2/")
+y.urls <- oauth_endpoint(NULL, "request_auth", "get_token", base_url="https://api.login.yahoo.com/oauth2")
+
+l <- list(redirect_uri = "oob", x=xyz)
+#oauth2.0_authorize_url(y.urls, redirect_uri = "oob")
+authorize_url <- modify_url(y.urls, query = compact(list(redirect_uri="oob")))
+
+y.token <- oauth2.0_token(y.urls, y.app)
 y.token
 #
 
