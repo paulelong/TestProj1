@@ -41,6 +41,6 @@ y.app <- oauth_app("yahoo", key=cKey, secret=cSecret)
 y.urls <- oauth_endpoint(NULL, "authorize", "accessToken", base_url="https://fantasysports.yahooapis.com/fantasy/v2/")
 y.token <- oauth2.0_token(y.urls, y.app, use_oob=TRUE)
 y.token
-
+#
 
 
