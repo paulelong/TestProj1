@@ -50,7 +50,10 @@ yahoo_token <- oauth1.0_token(oauth_endpoints("yahoo"), y.app)
 y.token
 #
 resp <- GET("https://fantasysports.yahooapis.com/fantasy/v2/game/nfl", config(token = yahoo_token))
-resp <- GET('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20fantasysports.teams%20where%20league_key%3D\'238.l.272272\'&format=json&diagnostics=true&callback=', config(token = yahoo_token))
+u <- "https://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.leagues%20where%20league_key%3D'371.l.272272'&format=json&diagnostics=true&callback="
+u <- "https://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.games%20where%20use_login%3D1%20and%20game_key%20in%20('238'%2C%20'223'%2C%20'mlb'%2C%20'nfl')&format=json&diagnostics=true&callback="
+
+resp <- GET(u, timeout(3), config(token = yahoo_token))
 
 #for(i in resp$content){ print(rawToChar(as.raw(i))) }
 j <- content(resp, as = "text")
