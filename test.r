@@ -51,10 +51,17 @@ y.token
 #
 resp <- GET("https://fantasysports.yahooapis.com/fantasy/v2/game/nfl", config(token = yahoo_token))
 u <- "https://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.leagues%20where%20league_key%3D'371.l.272272'&format=json&diagnostics=true&callback="
-u <- "https://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.games%20where%20use_login%3D1%20and%20game_key%20in%20('238'%2C%20'223'%2C%20'mlb'%2C%20'nfl')&format=json&diagnostics=true&callback="
+u <- "http://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.games%20where%20use_login%3D1%20and%20game_key%20in%20('238'%2C%20'223'%2C%20'mlb'%2C%20'nfl')&format=json&diagnostics=true&callback="
+u <- "https://query.yahooapis.com/v1/public/yql?q=select wind from weather.forecast where woeid in (select woeid from geo.places(1) where text='chicago, il')&format=json&callback="
 
-resp <- GET(u, timeout(3), config(token = yahoo_token))
+u <- "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22YHOO%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback="
+resp <- GET(u)
+
+resp <- GET(u, timeout(30), config(token = yahoo_token))
 
 #for(i in resp$content){ print(rawToChar(as.raw(i))) }
 j <- content(resp, as = "text")
 info <- fromJSON(j)
+
+x <- "hey there"
+x
