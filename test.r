@@ -45,8 +45,13 @@ l <- list(redirect_uri = "oob", x=xyz)
 #oauth2.0_authorize_url(y.urls, redirect_uri = "oob")
 authorize_url <- modify_url(y.urls, query = compact(list(redirect_uri="oob")))
 
-y.token <- oauth2.0_token(y.urls, y.app)
+#y.token <- oauth2.0_token(y.urls, y.app)d
+yahoo_token <- oauth1.0_token(oauth_endpoints("yahoo"), y.app)
 y.token
 #
+resp <- GET("https://fantasysports.yahooapis.com/fantasy/v2/game/nfl", config(token = yahoo_token))
+resp <- GET('https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20fantasysports.teams%20where%20league_key%3D\'238.l.272272\'&format=json&diagnostics=true&callback=', config(token = yahoo_token))
 
-
+#for(i in resp$content){ print(rawToChar(as.raw(i))) }
+j <- content(resp, as = "text")
+info <- fromJSON(j)
