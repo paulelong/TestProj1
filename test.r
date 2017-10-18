@@ -55,13 +55,18 @@ u <- "http://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.game
 u <- "https://query.yahooapis.com/v1/public/yql?q=select wind from weather.forecast where woeid in (select woeid from geo.places(1) where text='chicago, il')&format=json&callback="
 
 u <- "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(%22YHOO%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback="
+u <- "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20like%20(%27%25Y%25%27)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback="
 resp <- GET(u)
 
-resp <- GET(u, timeout(30), config(token = yahoo_token))
+j <- content(resp, as = "text")
+info <- fromJSON(j)
 
 #for(i in resp$content){ print(rawToChar(as.raw(i))) }
 j <- content(resp, as = "text")
 info <- fromJSON(j)
+info$results$symbol
 
 x <- "hey there"
 x
+
+str(info$query$results$quote$symbol)
