@@ -16,6 +16,8 @@ resp <- GET(u, config(token = yahoo_token))
 j <- content(resp, as = "text")
 info <- fromJSON(j)
 
- mylist <- info$query$results
+mylist <- info$query$results$quote
 
- cat <- mylist[[1, "symbol"]]
+t1 <- mylist[c(1,2,3)]
+
+cat <- mylist[[1, "symbol"]]
