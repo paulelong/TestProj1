@@ -48,4 +48,11 @@ c1.df <- as.data.frame(c1)
 
 URL.player <- "https://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.players%20where%20player_key%3D'371.p.29236'&format=json&diagnostics=true&callback="
 
+yahoo_token = YahooAuth()
 p1 <- YahooGetData(URL.player, yahoo_token)
+
+URL.player.stats = "https://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.players.stats%20where%20league_key%3D'371.l.272272'%20and%20player_key%3D'371.p.29236'%20and%20stats_week%3D1&format=json&diagnostics=true&callback="
+ps1 <- YahooGetData(URL.player.stats, yahoo_token)
+pstats <- ps1$query$results$player
+
+#https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20fantasysports.teams.stats%20where%20team_key%3D'238.l.627060.t.8'%20and%20stats_type%3D'date'%20and%20stats_date%3D'2010-05-14'&format=json&diagnostics=true&callback=
