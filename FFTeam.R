@@ -1,31 +1,13 @@
-library(httr)
-library("jsonlite")
+source(file="FFLib.R")
 
-leageKey <- '371.l.272272'
+InitEnv()
 
-cKey <- "dj0yJmk9dm4yTW9oamVGTFhnJmQ9WVdrOWR6RjVUWEJZTjJzbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD00Yg--" 
-cSecret <- "1b72efee9f73e2b64270cbd2a908873da8ddd04a" 
+InitLeague()
 
-YahooAuth <- function()
-{
-    y.app <- oauth_app("yahoo.teams", key=cKey, secret=cSecret, redirect_uri = "oob")
+Teams()
+Roster()
 
-    new_token <- oauth1.0_token(oauth_endpoints("yahoo"), y.app)
-
-    return(new_token)
-}
-
-YahooGetData <- function(url, myToken)
-{
-    resp <- GET(url, config(token = myToken))
-
-    j <- content(resp, as = "text")
-
-    info <- fromJSON(j)
-
-    return(info)
-}
-
+GetPlayerKey(332)
 
 u <- "https://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.teams%20where%20team_key%3D'371.l.272272.t.8'&format=json&diagnostics=true&callback="
 
