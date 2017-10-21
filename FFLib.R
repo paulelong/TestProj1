@@ -72,9 +72,8 @@ Roster <- function()
     roster <- YahooGetData(u, yahoo_token)
 
     players <- roster$query$results$team$roster$players$player
-    c1 <- c(players[c("player_key","editorial_team_full_name", "display_position", "status_full")], players$name[1])
+    c1 <- c(players[c("player_key","editorial_team_full_name", "display_position")], players$name[1])
     c1.df <- as.data.frame(c1)
 
     return(c1)
 }
-URL.team.roster <- "https://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.teams.roster%20where%20team_key%3D'371.l.272272.t.8'&format=json&diagnostics=true&callback="
