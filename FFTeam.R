@@ -1,4 +1,5 @@
 source(file="FFLib.R")
+source(file="FFData.R")
 
 InitEnv()
 
@@ -6,8 +7,13 @@ InitLeague()
 
 Teams()
 Roster()
-
+ps <- PlayerStats("371.p.29236", 3)
+lset <- LeagueSettings()
 GetPlayerKey(332)
+
+pl <- AllPlayers()
+
+ap <- AllPlayers()
 
 u <- "https://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.teams%20where%20team_key%3D'371.l.272272.t.8'&format=json&diagnostics=true&callback="
 
