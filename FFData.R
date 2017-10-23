@@ -5,5 +5,5 @@ GetStats <- function(leagueSettings)
 
 GetPlayers <- function(players)
 {
-    return(players[players$name[1], c("display_position", "status" )])
+    return(c(players$name[1], players[c("display_position", "status" )]))
 }
