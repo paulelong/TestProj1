@@ -1,4 +1,5 @@
 source(file="FFLib.R")
+
 source(file="FFData.R")
 
 InitEnv()
@@ -12,8 +13,14 @@ lset <- LeagueSettings()
 GetPlayerKey(332)
 
 cpl <- apply(cbind(p1,p2), 1, unlist)
+rbind(p1d, p2d) #pld[1], #pld[1,]
+rd[rd$full == "Tony Romo",]
 
-pl <- AllPlayers(44)
+df[nrow(df),] # get the last row
+lf = as.list(df)
+lf[[1]] # get first row...
+
+pl2 <- AllPlayers(44)
 p1 <- GetPlayers(pl)
 pl1 <- AllPlayers(1)
 p2 <- GetPlayers(pl1)
