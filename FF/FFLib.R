@@ -122,10 +122,27 @@ YahooAllPlayers <- function(start)
     return(players$query$results$player)    
 }
 
+lut <- c("RB"="R/|RB", "WR"="w/|WR", "TE"="/T|TE", "K"="K", "QB"="QB")
+
 YahooAllPlayersAtPosition <- function(position)
 {
-    ap <- AllPlayers(1)
-    apd <- as.data.frame(ap[c(1,3,8,10,15)])
+    df <- data.frame()
+
+    for(i in seq(1,1000,25))
+    {
+        ap <- YahooAllPlayers(i)
+        apd <- as.data.frame(c(ap$name[1], ap[c("player_key","bye_weeks","display_position", "eligible_positions")]))
+  #      apd <- as.data.frame(c(ap$name[1], ap[c("player_key","bye_weeks","display_position", "eligible_positions")], ap$eligible_positions))
+  #      apd <- as.data.frame(c(ap$name[1], ap[c(1,8)], ap$eligible_positions))
+
+        df <- rbind(df, apd)
+    }
+
+    df[c(grep("R/|RB", df$position)),]
+    df[c(grep("DEF", df$position)),]
+
+
+    apd <- as.data.frame(c(ap[c(1,8,10,15)],ap$name[1]))
 }
 
 LeagueSettings <- function()
