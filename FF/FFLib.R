@@ -82,19 +82,23 @@ YahooTeamRoster <- function(teamNum)
     return(players)
 }
 
-PlayerStats <- function(player_key, inWeek)
+YahooPlayerStats <- function(player_key, inWeek)
 {
     u <- paste0("https://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.players.stats%20where%20league_key%3D'", leagueKey,"'%20and%20player_key%3D'", player_key, "'%20and%20stats_week%3D",inWeek,"%20and%20stats_type='week'&format=json&diagnostics=true&callback=")
 
     playerstats <- YahooGetData(u, yahoo_token)
 
-    return(playerstats)
+    astt <- playerstats$query$results$player$player_stats$stats$stat
+    p <- playerstats$query$results$player$player_points$total
 
-    players <- roster$query$results$team$roster$players$player
-    c1 <- c(players[c("player_key","editorial_team_full_name", "display_position")], players$name[1])
-    c1.df <- as.data.frame(c1)
+    ps <- list(name=playerstats$query$results$player$name$full,total=p, stats=astt)
 
-    return(c1)
+    z <- c(ps$stats["stat_id"],ps$stats["value"])
+
+    si <- YahooLeagueStatInfo()
+    ms <- merge(z, si, by.x="stat_id", by.y = "stat_id")
+    
+    return(ms)
 }
 
 LeagueStats <- function(inWeek)
@@ -115,14 +119,21 @@ LeagueStats <- function(inWeek)
 YahooAllPlayers <- function(start)
 {
 #    u <- paste0("http://fantasysports.yahooapis.com/fantasy/v2/league/", leagueKey, "/players")
-     u <- paste0("https://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.players%20where%20league_key%3D'", leagueKey,"'%20and%20start%3D", start, "&format=json&diagnostics=true&callback=")
+     u <- paste0("https://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.players%20where%20league_key%3D'", leagueKey, "'%20and%20start%3D", start, "&format=json&diagnostics=true&callback=")
 
     players <- YahooGetData(u, yahoo_token)
 
     return(players$query$results$player)    
 }
 
-lut <- c("RB"="R/|RB", "WR"="w/|WR", "TE"="/T|TE", "K"="K", "QB"="QB")
+YahooAllPlayerStats <- function(start)
+{
+    u <- paste0("https://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.players.stats%20where%20league_key%3D'", leagueKey, "'%20and%20start%3D", start, "  &format=json&diagnostics=true&callback=")
+
+    players <- YahooGetData(u, yahoo_token)
+
+    return(players$query$results$player)    
+}
 
 YahooAllPlayersAtPosition <- function(position)
 {
@@ -138,18 +149,41 @@ YahooAllPlayersAtPosition <- function(position)
         df <- rbind(df, apd)
     }
 
-    df[c(grep("R/|RB", df$position)),]
-    df[c(grep("DEF", df$position)),]
-
-
-    apd <- as.data.frame(c(ap[c(1,8,10,15)],ap$name[1]))
+    
+    return(df[c(grep(position, df$display_position)),])
 }
 
-LeagueSettings <- function()
+YahooAllPlayerStatsAtPosition <- function(position)
+{
+    df <- data.frame()
+
+    for(i in seq(1,1000,25))
+    {
+        ap <- YahooAllPlayerStats(i)
+        apd <- as.data.frame(c(ap$name[1], ap[c("player_key","bye_weeks","display_position", "eligible_positions")]))
+        df <- rbind(df, apd)
+    }
+    
+    return(df[c(grep(position, df$display_position)),])
+}
+
+YahooLeagueSettings <- function()
 {
     u <- paste0("https://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.leagues.settings%20where%20league_key%3D'", leagueKey,"'&format=json&diagnostics=true&callback=")
 
     leageSettings <- YahooGetData(u, yahoo_token)
 
     return(leageSettings$query$results$league)    
+}
+
+YahooLeagueStatInfo <- function()
+{
+    ls <- YahooLeagueSettings()
+    statdesc <- ls$settings$stat_categories$stats$stat
+    statmod <- ls$settings$stat_modifiers$stats$stat    
+
+    lt <- c(s=statdesc["stat_id"], statdesc["name"])
+    y <- c(statmod["stat_id"], statmod["value"])
+    
+    return (merge(y, lt, by.x="stat_id", by.y="s.stat_id") )
 }
