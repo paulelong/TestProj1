@@ -20,13 +20,13 @@ GetTeam <- function(teamNum)
 {
     curTeam <- YahooTeam(teamNum)
 
-    return( curTeam[c(3,6,7,8,9,14)] )
+    return( as.data.frame(c( curTeam$managers$manager$nickname, curTeam["name"]) ) )
 }
 
 GetTeamRoster <- function(teamNum)
 {
     players <- YahooTeamRoster(teamNum)
-    c1 <- c(players[c("player_key","editorial_team_full_name", "display_position")], players$name[1])
+    c1 <- c(players$name[1], players[c("player_key","editorial_team_full_name", "display_position", "eligible_positions")])
     c1.df <- as.data.frame(c1)
 
     return(c1.df)
@@ -48,6 +48,5 @@ GetAllOwnedPlayers <- function()
 
 GetAvailablePlayersAtPosition <- function(position)
 {
-    any(position == apd[24,]$eligible_position$position[[1]])
-    #apd['RB' %in% apd$eligible_position$position[[1]]]
+    return (YahooAllPlayersAtPosition(position))
 }
