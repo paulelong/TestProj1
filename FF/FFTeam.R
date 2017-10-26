@@ -10,10 +10,16 @@ InitLeague()
 aop <- GetAllOwnedPlayers()
 aop
 
+YahooAllPlayerStatsAtPosition("TE")
+
+GetTeamRoster(7)
 
 Teams()
 Roster()
-ps <- PlayerStats("371.p.29236", 3)
+
+ps <- YahooPlayerStats("371.p.25812", 3)
+si <- YahooLeagueStatInfo()
+
 lset <- LeagueSettings()
 GetPlayerKey(332)
 
