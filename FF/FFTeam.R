@@ -10,7 +10,7 @@ InitLeague()
 aop <- GetAllOwnedPlayers()
 aop
 
-YahooAllPlayerStatsAtPosition("TE")
+YahooAllPlayerStatsAtPosition("TE", 3)
 
 GetTeamRoster(7)
 
