@@ -126,9 +126,9 @@ YahooAllPlayers <- function(start)
     return(players$query$results$player)    
 }
 
-YahooAllPlayerStats <- function(start)
+YahooAllPlayerStats <- function(start,inWeek)
 {
-    u <- paste0("https://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.players.stats%20where%20league_key%3D'", leagueKey, "'%20and%20start%3D", start, "  &format=json&diagnostics=true&callback=")
+    u <- paste0("https://query.yahooapis.com/v1/yql?q=select%20*%20from%20fantasysports.players.stats%20where%20league_key%3D'", leagueKey, "'%20and%20start%3D", start, "%20and%20stats_week%3D",inWeek,"%20and%20stats_type='week'&format=json&diagnostics=true&callback=")
 
     players <- YahooGetData(u, yahoo_token)
 
@@ -139,29 +139,37 @@ YahooAllPlayersAtPosition <- function(position)
 {
     df <- data.frame()
 
-    for(i in seq(1,1000,25))
+
+    for(i in seq(1,100,25))
     {
         ap <- YahooAllPlayers(i)
         apd <- as.data.frame(c(ap$name[1], ap[c("player_key","bye_weeks","display_position", "eligible_positions")]))
   #      apd <- as.data.frame(c(ap$name[1], ap[c("player_key","bye_weeks","display_position", "eligible_positions")], ap$eligible_positions))
   #      apd <- as.data.frame(c(ap$name[1], ap[c(1,8)], ap$eligible_positions))
-
-        df <- rbind(df, apd)
+        df <- rbind(df, adp)        
     }
-
     
     return(df[c(grep(position, df$display_position)),])
 }
 
-YahooAllPlayerStatsAtPosition <- function(position)
+YahooAllPlayerStatsAtPosition <- function(position, inWeek)
 {
     df <- data.frame()
+    si <- YahooLeagueStatInfo()
 
     for(i in seq(1,1000,25))
     {
-        ap <- YahooAllPlayerStats(i)
-        apd <- as.data.frame(c(ap$name[1], ap[c("player_key","bye_weeks","display_position", "eligible_positions")]))
-        df <- rbind(df, apd)
+        ap <- YahooAllPlayerStats(i, inWeek)
+        #apd <- as.data.frame(c(ap$name[1], ap[c("player_key","bye_weeks","display_position", "eligible_positions")]))
+
+        astt <- ap$player_stats$stats$stat
+        castt <- lapply(astt, function(x) merge(x, si, by.x="stat_id", by.y = "stat_id"))
+        
+        p <- ap$player_points$total
+
+        ps <- list(name=ap$name$full,total=p, stats=castt)
+
+        df <- rbind(df, ps)
     }
     
     return(df[c(grep(position, df$display_position)),])
